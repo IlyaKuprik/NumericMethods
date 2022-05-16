@@ -2,7 +2,7 @@ import numpy as np
 
 
 class CalculationScheme:
-    # TODO: Класс расчётной схемы двухэтапного метода Рунге-Кутты
+    # Класс расчётной схемы двухэтапного метода Рунге-Кутты
     def __init__(self, x_0, y_10, y_20, A=1 / 12, B=1 / 20, x_k=np.pi):
         self.s = 2
         self.c_2 = 1 / 12
@@ -51,12 +51,21 @@ def get_first_step(A, B, y_1, y_2, x_0, x_k, s, eps=1e-4):
     return (eps / delta) ** (1 / (1 + s))
 
 
-def get_runge_method_res(A, B, h):
-    """Двухэтапный метод рунге при параметрах A, B и начальном шаге h"""
-    scheme = CalculationScheme(0, B * np.pi, A * np.pi)
-    scheme.x_0 = 0
-    x_i = 0
-    x_k = np.pi
+def get_runge_err(res1, res2, s):
+    """Оценка погрешности по методу Рунге"""
+    res1 = np.array(res1)
+    res2 = np.array(res2)
+    return np.linalg.norm((res2 - res1) / (2 ** s - 1))
+
+
+def get_runge_method_res(A, B, h, x_0, x_k):
+    """
+    Двухэтапный метод рунге
+    Начало в x_0, конец в x_k
+    """
+    scheme = CalculationScheme(x_0, B * np.pi, A * np.pi)
+    scheme.x_0 = x_0
+    x_i = x_0
     while x_i < x_k:
         if x_i + h > x_k:
             h = x_k - x_i
@@ -70,14 +79,7 @@ def get_runge_method_res(A, B, h):
     return scheme.y_1(x_k), scheme.y_2(x_k)
 
 
-def get_runge_err(res1, res2, s):
-    """Оценка полной погрешности по методу Рунге"""
-    res1 = np.array(res1)
-    res2 = np.array(res2)
-    return np.linalg.norm((res2 - res1) / (2 ** s - 1))
-
-
-def runge_method(eps=1e-4):
+def runge_method_const_step(eps=1e-4):
     A = 1 / 12
     B = 1 / 20
     s = 2
@@ -87,16 +89,46 @@ def runge_method(eps=1e-4):
     y_20 = A * np.pi
 
     step = get_first_step(A, B, y_10, y_20, x_0, x_k, s)
-    res1 = get_runge_method_res(A, B, step)
-    res2 = get_runge_method_res(A, B, step / 2)
+    res1 = get_runge_method_res(A, B, step, x_0, x_k)
+    res2 = get_runge_method_res(A, B, step / 2, x_0, x_k)
     while get_runge_err(res1, res2, s) > eps:
         step /= 2
-        res1 = get_runge_method_res(A, B, step)
-        res2 = get_runge_method_res(A, B, step / 2)
+        res1 = get_runge_method_res(A, B, step, x_0, x_k)
+        res2 = get_runge_method_res(A, B, step / 2, x_0, x_k)
         print(f"Результаты с шагом step: {res1}\nРезультаты с шагом step/2: {res2}")
         print(f"Шаг: {step}\nОшибка: {get_runge_err(res1, res2, s)}")
-    return step/2, res2
+    return step / 2, res2
 
 
-print(runge_method(eps=1e-4))
+def runge_method_auto_step(eps=1e-5):
+    A = 1 / 12
+    B = 1 / 20
+    s = 2
+    x_0 = 0
+    x_k = np.pi
+    y_10 = B * np.pi
+    y_20 = A * np.pi
+    h = get_first_step(A, B, y_10, y_20, x_0, x_k, s)
 
+    x_i = x_0
+
+    while x_i < x_k:
+        if x_i + h > x_k:
+            h = x_k - x_i
+        res1 = get_runge_method_res(A, B, h, x_i, x_i + h)
+        res2 = get_runge_method_res(A, B, h / 2, x_i, x_i + h)
+        x_i += h
+
+        r = get_runge_err(res1, res2, s)
+        # TODO: написать условия дла автоматического выбора шага
+        if r > eps * (2 ** s):
+            pass
+        elif eps < r <= eps * (2 ** s):
+            pass
+        elif eps / (2 ** (s + 1)) <= eps:
+            pass
+        else:
+            pass
+
+
+print(runge_method_const_step(eps=1e-4))
