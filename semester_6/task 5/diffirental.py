@@ -58,12 +58,12 @@ def get_runge_err(res1, res2, s):
     return np.linalg.norm((res2 - res1) / (2 ** s - 1))
 
 
-def get_runge_method_res(A, B, h, x_0, x_k):
+def get_runge_method_res(h, x_0, y_01, y02, x_k):
     """
     Двухэтапный метод рунге
     Начало в x_0, конец в x_k
     """
-    scheme = CalculationScheme(x_0, B * np.pi, A * np.pi)
+    scheme = CalculationScheme(x_0, y_01, y02)
     scheme.x_0 = x_0
     x_i = x_0
     while x_i < x_k:
@@ -89,12 +89,12 @@ def runge_method_const_step(eps=1e-4):
     y_20 = A * np.pi
 
     step = get_first_step(A, B, y_10, y_20, x_0, x_k, s)
-    res1 = get_runge_method_res(A, B, step, x_0, x_k)
-    res2 = get_runge_method_res(A, B, step / 2, x_0, x_k)
+    res1 = get_runge_method_res(step, x_0, y_10, y_20, x_k)
+    res2 = get_runge_method_res(step / 2, x_0, y_10, y_20, x_k)
     while get_runge_err(res1, res2, s) > eps:
         step /= 2
-        res1 = get_runge_method_res(A, B, step, x_0, x_k)
-        res2 = get_runge_method_res(A, B, step / 2, x_0, x_k)
+        res1 = get_runge_method_res(step, x_0, y_10, y_20, x_k)
+        res2 = get_runge_method_res(step / 2, x_0, y_10, y_20, x_k)
         print(f"Результаты с шагом step: {res1}\nРезультаты с шагом step/2: {res2}")
         print(f"Шаг: {step}\nОшибка: {get_runge_err(res1, res2, s)}")
     return step / 2, res2
@@ -115,20 +115,29 @@ def runge_method_auto_step(eps=1e-5):
     while x_i < x_k:
         if x_i + h > x_k:
             h = x_k - x_i
-        res1 = get_runge_method_res(A, B, h, x_i, x_i + h)
-        res2 = get_runge_method_res(A, B, h / 2, x_i, x_i + h)
-        x_i += h
+        # результаты (y1(x_i+h), y2(x_i+h)) в  точке x_i + h с шагом h
+        res1 = get_runge_method_res(h, x_i, y_10, y_20, x_i + h)
+        # результаты (y1(x_i+h), y2(x_i+h)) в точке x_i + h с шагом h/2 (делается 2 половинных шага)
+        res2 = get_runge_method_res(h / 2, x_i, y_10, y_20, x_i + h)
 
         r = get_runge_err(res1, res2, s)
         # TODO: написать условия дла автоматического выбора шага
         if r > eps * (2 ** s):
-            pass
+            h /= 2  # остаемся в x_i, но шаг уменьшаем
         elif eps < r <= eps * (2 ** s):
-            pass
-        elif eps / (2 ** (s + 1)) <= eps:
-            pass
+            x_i += h
+            h /= 2  # уменьшаем шаг и в качестве приблежения выбираем результаты с половинным шагом
+            y_10, y_20 = map(float, res2)
+        elif eps / (2 ** (s + 1)) <= r:
+            x_i += h  # шаг такой же, приближение выбирается с полным шагом
+            y_10, y_20 = map(float, res1)
         else:
-            pass
+            x_i += h
+            h *= 2 # увеличиваем шаг в 2 раза, приближение с полным шагом
+            y_10, y_20 = map(float, res1)
+    return h, (y_10, y_20)
 
 
 print(runge_method_const_step(eps=1e-4))
+
+print(runge_method_auto_step(eps=1e-5))
