@@ -8,6 +8,8 @@ B = 1 / 20
 C_2 = 1 / 12
 Y_10 = B * np.pi
 Y_20 = A * np.pi
+Y_1K = 0.2219309915117
+Y_2K = 0.2319295303698
 
 
 def get_first_step(A, B, y_1, y_2, x_0, x_k, s, eps=1e-4):
@@ -20,7 +22,7 @@ def get_runge_err(res1, res2, s):
     """Оценка погрешности по методу Рунге"""
     res1 = np.array(res1)
     res2 = np.array(res2)
-    return np.linalg.norm((res2 - res1) / (2 ** s - 1))
+    return (res2 - res1) / (2 ** s - 1)
 
 
 def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme):
@@ -41,27 +43,23 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme):
         scheme.x_0 = x_i
         scheme.y_10 = y_1i
         scheme.y_20 = y_2i
-    return scheme.y_1(x_k), scheme.y_2(x_k)
+    return np.array([scheme.y_1(x_k), scheme.y_2(x_k)])
 
 
-def runge_method_const_step(CalculationScheme, eps=1e-4):
-    s = 2
-
+def runge_method_const_step(CalculationScheme, s, eps=1e-4):
     step = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s)
     res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme)
     res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme)
-    while get_runge_err(res1, res2, s) > eps:
+    while np.linalg.norm(get_runge_err(res1, res2, s)) > eps:
         step /= 2
         res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme)
         res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme)
         print(f"Результаты с шагом step: {res1}\nРезультаты с шагом step/2: {res2}")
         print(f"Шаг: {step}\nОшибка: {get_runge_err(res1, res2, s)}")
-    return step / 2, res2
+    return step / 2, res2 + get_runge_err(res1, res2, s)
 
 
-def runge_method_auto_step(CalculationScheme, eps=1e-5):
-    s = 2
-
+def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
     h = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s)
 
     x_i = X_0
@@ -76,23 +74,28 @@ def runge_method_auto_step(CalculationScheme, eps=1e-5):
         # результаты (y1(x_i+h), y2(x_i+h)) в точке x_i + h с шагом h/2 (делается 2 половинных шага)
         res2 = get_runge_method_res(h / 2, x_i, y_10, y_20, x_i + h, CalculationScheme)
 
-        r = get_runge_err(res1, res2, s)
+        added = get_runge_err(res1, res2, s)
+        r = np.linalg.norm(added)
         if r > eps * (2 ** s):
             h /= 2  # остаемся в x_i, но шаг уменьшаем
         elif eps < r <= eps * (2 ** s):
             x_i += h
             h /= 2  # уменьшаем шаг и в качестве приблежения выбираем результаты с половинным шагом
-            y_10, y_20 = map(float, res2)
+            y_10, y_20 = map(float, res2 + added)
         elif eps / (2 ** (s + 1)) <= r:
             x_i += h  # шаг такой же, приближение выбирается с полным шагом
-            y_10, y_20 = map(float, res1)
+            y_10, y_20 = map(float, res1 + added)
         else:
             x_i += h
             h *= 2  # увеличиваем шаг в 2 раза, приближение с полным шагом
-            y_10, y_20 = map(float, res1)
+            y_10, y_20 = map(float, res1 + added)
     return h, (y_10, y_20)
 
 
-print(runge_method_const_step(TwoStageCalculationScheme, eps=1e-4))
+print(runge_method_const_step(TwoStageCalculationScheme, s=2, eps=1e-4))
 
-print(runge_method_auto_step(TwoStageCalculationScheme, eps=1e-5))
+print(runge_method_auto_step(TwoStageCalculationScheme, s=2, eps=1e-5))
+
+print(runge_method_const_step(FourStageCalculationScheme, s=4, eps=1e-4))
+
+print(runge_method_auto_step(FourStageCalculationScheme, s=4, eps=1e-5))
