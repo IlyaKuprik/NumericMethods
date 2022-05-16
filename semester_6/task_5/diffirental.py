@@ -27,7 +27,7 @@ def get_runge_err(res1, res2, s):
 
 def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme):
     """
-    Двухэтапный метод рунге
+    Метод рунге
     Начало в x_0, конец в x_k
     """
     scheme = CalculationScheme(x_0, y_01, y02, A, B, C_2)
@@ -47,7 +47,7 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme):
 
 
 def runge_method_const_step(CalculationScheme, s, eps=1e-4):
-    step = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s)
+    step = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s, eps=eps)
     res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme)
     res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme)
     while np.linalg.norm(get_runge_err(res1, res2, s)) > eps:
@@ -60,7 +60,7 @@ def runge_method_const_step(CalculationScheme, s, eps=1e-4):
 
 
 def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
-    h = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s)
+    h = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s, eps=eps)
 
     x_i = X_0
     y_10 = Y_10
@@ -92,10 +92,10 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
     return h, (y_10, y_20)
 
 
-print(runge_method_const_step(TwoStageCalculationScheme, s=2, eps=1e-4))
+print(np.array([Y_1K, Y_2K]) - runge_method_const_step(TwoStageCalculationScheme, s=2, eps=1e-4)[1])
 
-print(runge_method_auto_step(TwoStageCalculationScheme, s=2, eps=1e-5))
+print(np.array([Y_1K, Y_2K]) - runge_method_auto_step(TwoStageCalculationScheme, s=2, eps=1e-5)[1])
 
-print(runge_method_const_step(FourStageCalculationScheme, s=4, eps=1e-4))
+print(np.array([Y_1K, Y_2K]) - runge_method_const_step(FourStageCalculationScheme, s=4, eps=1e-4)[1])
 
-print(runge_method_auto_step(FourStageCalculationScheme, s=4, eps=1e-5))
+print(np.array([Y_1K, Y_2K]) - runge_method_auto_step(FourStageCalculationScheme, s=4, eps=1e-5)[1])
