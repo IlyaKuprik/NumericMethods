@@ -25,12 +25,12 @@ def get_runge_err(res1, res2, s):
     return (res2 - res1) / (2 ** s - 1)
 
 
-def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme):
+def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s):
     """
     Метод рунге
     Начало в x_0, конец в x_k
     """
-    scheme = CalculationScheme(x_0, y_01, y02, A, B, C_2)
+    scheme = CalculationScheme(x_0, y_01, y02, A, B, C_2, s)
     scheme.x_0 = x_0
     x_i = x_0
     while x_i < x_k:
@@ -48,12 +48,12 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme):
 
 def runge_method_const_step(CalculationScheme, s, eps=1e-4):
     step = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s, eps=eps)
-    res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme)
-    res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme)
+    res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme, s)
+    res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme, s)
     while np.linalg.norm(get_runge_err(res1, res2, s)) > eps:
         step /= 2
-        res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme)
-        res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme)
+        res1 = get_runge_method_res(step, X_0, Y_10, Y_20, X_K, CalculationScheme, s)
+        res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme, s)
         print(f"Результаты с шагом step: {res1}\nРезультаты с шагом step/2: {res2}")
         print(f"Шаг: {step}\nОшибка: {get_runge_err(res1, res2, s)}")
     return step / 2, res2 + get_runge_err(res1, res2, s)
@@ -70,9 +70,9 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
         if x_i + h > X_K:
             h = X_K - x_i
         # результаты (y1(x_i+h), y2(x_i+h)) в  точке x_i + h с шагом h
-        res1 = get_runge_method_res(h, x_i, y_10, y_20, x_i + h, CalculationScheme)
+        res1 = get_runge_method_res(h, x_i, y_10, y_20, x_i + h, CalculationScheme, s)
         # результаты (y1(x_i+h), y2(x_i+h)) в точке x_i + h с шагом h/2 (делается 2 половинных шага)
-        res2 = get_runge_method_res(h / 2, x_i, y_10, y_20, x_i + h, CalculationScheme)
+        res2 = get_runge_method_res(h / 2, x_i, y_10, y_20, x_i + h, CalculationScheme, s)
 
         added = get_runge_err(res1, res2, s)
         r = np.linalg.norm(added)

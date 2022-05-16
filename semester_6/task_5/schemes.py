@@ -1,6 +1,6 @@
 class CalculationScheme:
-    def __init__(self, x_0, y_10, y_20, A, B, c_2):
-        self.s = 2
+    def __init__(self, x_0, y_10, y_20, A, B, c_2, s):
+        self.s = s
         self.c_2 = c_2
         self.a_21 = c_2
         self.b_2 = 1 / (2 * c_2)
