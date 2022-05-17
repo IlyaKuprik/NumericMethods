@@ -22,7 +22,7 @@ def get_runge_err(res1, res2, s):
     return (res2 - res1) / (2 ** s - 1)
 
 
-def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s, log=False):
+def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s, log=False, to_calc=False):
     """
     Метод рунге
     Начало в x_0, конец в x_k
@@ -44,6 +44,8 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s, log=False
         res_list.append((x_i, np.array([y_1i, y_2i])))
     if log:
         return res_list
+    if to_calc:
+        return np.array([scheme.y_1(x_k), scheme.y_2(x_k)]), scheme.num_of_calc
     return np.array([scheme.y_1(x_k), scheme.y_2(x_k)])
 
 
@@ -60,7 +62,7 @@ def runge_method_const_step(CalculationScheme, s, eps=1e-4):
     return step / 2, res2  # без уточнения + get_runge_err(res1, res2, s)
 
 
-def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False):
+def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False, to_calc=False):
     h = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s, eps=eps)
 
     x_i = X_0
@@ -68,15 +70,20 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False):
     y_20 = Y_20
 
     res_lst = []
+    num_of_calc = 0
 
     while x_i < X_K:
         if x_i + h > X_K:
             h = X_K - x_i
         # результаты (y1(x_i+h), y2(x_i+h)) в  точке x_i + h с шагом h
-        res1 = get_runge_method_res(h, x_i, y_10, y_20, x_i + h, CalculationScheme, s)
+        res1 = get_runge_method_res(h, x_i, y_10, y_20, x_i + h, CalculationScheme, s, to_calc=to_calc)
         # результаты (y1(x_i+h), y2(x_i+h)) в точке x_i + h с шагом h/2 (делается 2 половинных шага)
-        res2 = get_runge_method_res(h / 2, x_i, y_10, y_20, x_i + h, CalculationScheme, s)
+        res2 = get_runge_method_res(h / 2, x_i, y_10, y_20, x_i + h, CalculationScheme, s, to_calc=to_calc)
 
+        if to_calc:
+            num_of_calc += res1[1] + res2[1]
+            res1 = res1[0]
+            res2 = res2[0]
         added = get_runge_err(res1, res2, s)
         r = np.linalg.norm(added)
         if r > eps * (2 ** s):
@@ -96,4 +103,6 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False):
         res_lst.append((x_i, h, np.array([y_10, y_20]), added))
     if log:
         return res_lst
+    if to_calc:
+        return num_of_calc
     return h, np.array([y_10, y_20])

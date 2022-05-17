@@ -2,6 +2,7 @@ from semester_6.task_5.schemes import TwoStageCalculationScheme, ThreeStageCalcu
 from semester_6.task_5.diffirental import *
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pandas as pd
 
 TRUE_Y_VALUE = np.array([0.2219309915117, 0.2319295303698])
 
@@ -30,6 +31,10 @@ def const_step_err_graphic(h2, h3):
         err_lst3.append(np.linalg.norm(res3[i][1] - y_val(res3[i][0])))
         x_lst3.append(res3[i][0])
 
+    fig, ax = plt.subplots()
+    ax.grid(which="major", linewidth=1.2)
+    ax.grid(which="minor", linestyle="solid", color="gray", linewidth=0.5)
+
     sns.lineplot(x=x_lst2, y=err_lst2)
     sns.lineplot(x=x_lst3, y=err_lst3)
     plt.title('Графики зависимости истинной полной погрешности от значения независимой переменной x')
@@ -53,6 +58,10 @@ def auto_step_val_graphic():
     for i in range(len(res3)):
         h_lst3.append(res3[i][1])
         x_lst3.append(res3[i][0])
+
+    fig, ax = plt.subplots()
+    ax.grid(which="major", linewidth=1.2)
+    ax.grid(which="minor", linestyle="solid", color="gray", linewidth=0.5)
 
     sns.lineplot(x=x_lst2, y=h_lst2)
     sns.lineplot(x=x_lst3, y=h_lst3)
@@ -87,6 +96,10 @@ def auto_step_local_err_graphic():
     loc_real_err_lst2 = np.array(loc_real_err_lst2)
     loc_real_err_lst3 = np.array(loc_real_err_lst3)
 
+    fig, ax = plt.subplots()
+    ax.grid(which="major", linewidth=1.2)
+    ax.grid(which="minor", linestyle="solid", color="gray", linewidth=0.5)
+
     sns.lineplot(x=x_lst2, y=np.linalg.norm(loc_real_err_lst2 / loc_approximate_err_lst2))
     sns.lineplot(x=x_lst3, y=np.linalg.norm(loc_real_err_lst3 / loc_approximate_err_lst3))
     plt.title('Графики зависимости отношения локальной погрешности к оценке погрешности от значения независимой '
@@ -97,15 +110,16 @@ def auto_step_local_err_graphic():
     plt.show()
 
 
-def auto_step_calc_num_graphic(s, CalculationScheme):
-    n_1 = runge_method_auto_step(CalculationScheme, s, eps=1e-1, log=True)[1]
-    n_2 = runge_method_auto_step(CalculationScheme, s, eps=1e-2, log=True)[1]
-    n_3 = runge_method_auto_step(CalculationScheme, s, eps=1e-3, log=True)[1]
-    n_4 = runge_method_auto_step(CalculationScheme, s, eps=1e-4, log=True)[1]
-    n_5 = runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=True)[1]
-    n_6 = runge_method_auto_step(CalculationScheme, s, eps=1e-6, log=True)[1]
-    n_7 = runge_method_auto_step(CalculationScheme, s, eps=1e-7, log=True)[1]
-
+def auto_step_calc_num_graphic():
+    eps_arr = [str(10 ** (-p)) for p in range(1, 9)]
+    num_of_calculates_2 = [runge_method_auto_step(TwoStageCalculationScheme, 2, eps=float(eps), to_calc=True) for eps in
+                           eps_arr]
+    num_of_calculates_3 = [runge_method_auto_step(ThreeStageCalculationScheme, 3, eps=float(eps), to_calc=True) for eps in
+                           eps_arr]
+    class_tmp = ['Двухэтапный метод']*len(eps_arr) + ['Трёхэтапный метод']*len(eps_arr)
+    df = pd.DataFrame({'заданная погрешность': eps_arr + eps_arr, 'количество вычислений': num_of_calculates_2 + num_of_calculates_3, 'class':class_tmp})
+    sns.barplot(data = df, x='заданная погрешность', y='количество вычислений', hue='class')
+    plt.show()
 
 
 def print_result():
@@ -126,10 +140,12 @@ def print_result():
           f"\n\t\tПогрешность: {np.linalg.norm(y_val(np.pi) - res_4[1])}")
 
 
-# print_result()  # пункт 1.2, 2.1, 3.2, 3.3
-#
-# const_step_err_graphic(h2=0.14580103006207398/2, h3=0.3141570538911852/2)  # пункт 3.2
-#
-# auto_step_val_graphic()  # пункт 3.3.1
-#
-# auto_step_local_err_graphic()  # пункт 3.3.2
+print_result()  # пункт 1.2, 2.1, 3.2, 3.3
+
+const_step_err_graphic(h2=0.14580103006207398/2, h3=0.3141570538911852/2)  # пункт 3.2
+
+auto_step_val_graphic()  # пункт 3.3.1
+
+auto_step_local_err_graphic()  # пункт 3.3.2
+
+auto_step_calc_num_graphic()
