@@ -12,18 +12,22 @@ class CalculationScheme:
         self.x_0 = x_0
         self.y_10 = y_10
         self.y_20 = y_20
+        self.num_of_calc = 0
 
 
 class TwoStageCalculationScheme(CalculationScheme):
+    # Пункт 1.1
     """Класс расчётной схемы двухэтапного метода Рунге-Кутты"""
 
     def y_1(self, x):
+        self.num_of_calc += 1
         h = abs(self.x_0 - x)
         if h < 1e-9:
             return self.y_10
         return self.y_1(self.x_0) + self.b_1 * self.k_1(1, h) + self.b_2 * self.k_1(2, h)
 
     def y_2(self, x):
+        self.num_of_calc += 1
         h = abs(self.x_0 - x)
         if h < 1e-9:
             return self.y_20
@@ -45,9 +49,11 @@ class TwoStageCalculationScheme(CalculationScheme):
 
 
 class ThreeStageCalculationScheme(CalculationScheme):
+    # Пункт 3.1
     """Класс расчётной схемы четырёхэтапного метода Рунге-Кутты"""
 
     def y_1(self, x):
+        self.num_of_calc += 1
         h = abs(self.x_0 - x)
         if h < 1e-9:
             return self.y_10
@@ -55,6 +61,7 @@ class ThreeStageCalculationScheme(CalculationScheme):
                 self.k_1(1, h) + 4 * self.k_1(2, h) + self.k_1(3, h))
 
     def y_2(self, x):
+        self.num_of_calc += 1
         h = abs(self.x_0 - x)
         if h < 1e-9:
             return self.y_20
@@ -82,6 +89,7 @@ class FourStageCalculationScheme(CalculationScheme):
     """Класс расчётной схемы четырёхэтапного метода Рунге-Кутты"""
 
     def y_1(self, x):
+        self.num_of_calc += 1
         h = abs(self.x_0 - x)
         if h < 1e-9:
             return self.y_10
@@ -89,6 +97,7 @@ class FourStageCalculationScheme(CalculationScheme):
                 self.k_1(1, h) + 2 * self.k_1(2, h) + 2 * self.k_1(3, h) + self.k_1(4, h))
 
     def y_2(self, x):
+        self.num_of_calc += 1
         h = abs(self.x_0 - x)
         if h < 1e-9:
             return self.y_20

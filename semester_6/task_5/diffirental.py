@@ -1,5 +1,4 @@
 import numpy as np
-from semester_6.task_5.schemes import TwoStageCalculationScheme, ThreeStageCalculationScheme, FourStageCalculationScheme
 
 X_0 = 0
 X_K = np.pi
@@ -8,8 +7,6 @@ B = 1 / 20
 C_2 = 1 / 12
 Y_10 = B * np.pi
 Y_20 = A * np.pi
-Y_1K = 0.2219309915117
-Y_2K = 0.2319295303698
 
 
 def get_first_step(A, B, y_1, y_2, x_0, x_k, s, eps=1e-4):
@@ -25,7 +22,7 @@ def get_runge_err(res1, res2, s):
     return (res2 - res1) / (2 ** s - 1)
 
 
-def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s):
+def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s, log=False):
     """
     Метод рунге
     Начало в x_0, конец в x_k
@@ -33,6 +30,7 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s):
     scheme = CalculationScheme(x_0, y_01, y02, A, B, C_2, s)
     scheme.x_0 = x_0
     x_i = x_0
+    res_list = []
     while x_i < x_k:
         if x_i + h > x_k:
             h = x_k - x_i
@@ -43,6 +41,9 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s):
         scheme.x_0 = x_i
         scheme.y_10 = y_1i
         scheme.y_20 = y_2i
+        res_list.append((x_i, np.array([y_1i, y_2i])))
+    if log:
+        return res_list
     return np.array([scheme.y_1(x_k), scheme.y_2(x_k)])
 
 
@@ -56,15 +57,17 @@ def runge_method_const_step(CalculationScheme, s, eps=1e-4):
         res2 = get_runge_method_res(step / 2, X_0, Y_10, Y_20, X_K, CalculationScheme, s)
         print(f"Результаты с шагом step: {res1}\nРезультаты с шагом step/2: {res2}")
         print(f"Шаг: {step}\nОшибка: {get_runge_err(res1, res2, s)}")
-    return step / 2, res2 + get_runge_err(res1, res2, s)
+    return step / 2, res2  # без уточнения + get_runge_err(res1, res2, s)
 
 
-def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
+def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False):
     h = get_first_step(A, B, Y_10, Y_20, X_0, X_K, s, eps=eps)
 
     x_i = X_0
     y_10 = Y_10
     y_20 = Y_20
+
+    res_lst = []
 
     while x_i < X_K:
         if x_i + h > X_K:
@@ -78,30 +81,19 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
         r = np.linalg.norm(added)
         if r > eps * (2 ** s):
             h /= 2  # остаемся в x_i, но шаг уменьшаем
+            continue
         elif eps < r <= eps * (2 ** s):
             x_i += h
             h /= 2  # уменьшаем шаг и в качестве приблежения выбираем результаты с половинным шагом
-            y_10, y_20 = map(float, res2 + added)
+            y_10, y_20 = map(float, res2)  # без уточнения + added
         elif eps / (2 ** (s + 1)) <= r:
             x_i += h  # шаг такой же, приближение выбирается с полным шагом
-            y_10, y_20 = map(float, res1 + added)
+            y_10, y_20 = map(float, res1)  # без уточнения + added
         else:
             x_i += h
             h *= 2  # увеличиваем шаг в 2 раза, приближение с полным шагом
-            y_10, y_20 = map(float, res1 + added)
+            y_10, y_20 = map(float, res1)  # без уточнения + added
+        res_lst.append((x_i, h, np.array([y_10, y_20]), added))
+    if log:
+        return res_lst
     return h, np.array([y_10, y_20])
-
-
-def print_result():
-    res_1 = runge_method_const_step(TwoStageCalculationScheme, s=2, eps=1e-4)
-    res_2 = runge_method_auto_step(TwoStageCalculationScheme, s=2, eps=1e-5)
-    res_3 = runge_method_const_step(ThreeStageCalculationScheme, s=3, eps=1e-6)
-    res_4 =  runge_method_auto_step(ThreeStageCalculationScheme, s=3, eps=1e-5)
-
-print()
-
-print()
-
-print("С постоянным шагом", )
-
-print("С атоматическим шагом",)
