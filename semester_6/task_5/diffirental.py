@@ -1,5 +1,5 @@
 import numpy as np
-from semester_6.task_5.schemes import *
+from semester_6.task_5.schemes import TwoStageCalculationScheme, ThreeStageCalculationScheme, FourStageCalculationScheme
 
 X_0 = 0
 X_K = np.pi
@@ -89,13 +89,19 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5):
             x_i += h
             h *= 2  # увеличиваем шаг в 2 раза, приближение с полным шагом
             y_10, y_20 = map(float, res1 + added)
-    return h, (y_10, y_20)
+    return h, np.array([y_10, y_20])
 
 
-print(np.array([Y_1K, Y_2K]) - runge_method_const_step(TwoStageCalculationScheme, s=2, eps=1e-4)[1])
+def print_result():
+    res_1 = runge_method_const_step(TwoStageCalculationScheme, s=2, eps=1e-4)
+    res_2 = runge_method_auto_step(TwoStageCalculationScheme, s=2, eps=1e-5)
+    res_3 = runge_method_const_step(ThreeStageCalculationScheme, s=3, eps=1e-6)
+    res_4 =  runge_method_auto_step(ThreeStageCalculationScheme, s=3, eps=1e-5)
 
-print(np.array([Y_1K, Y_2K]) - runge_method_auto_step(TwoStageCalculationScheme, s=2, eps=1e-5)[1])
+print()
 
-print(np.array([Y_1K, Y_2K]) - runge_method_const_step(FourStageCalculationScheme, s=4, eps=1e-4)[1])
+print()
 
-print(np.array([Y_1K, Y_2K]) - runge_method_auto_step(FourStageCalculationScheme, s=4, eps=1e-5)[1])
+print("С постоянным шагом", )
+
+print("С атоматическим шагом",)
