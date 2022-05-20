@@ -102,8 +102,7 @@ def auto_step_local_err_graphic():
 
     sns.lineplot(x=x_lst2, y=np.linalg.norm(loc_real_err_lst2 / loc_approximate_err_lst2))
     sns.lineplot(x=x_lst3, y=np.linalg.norm(loc_real_err_lst3 / loc_approximate_err_lst3))
-    plt.title('Графики зависимости отношения локальной погрешности к оценке погрешности от значения независимой '
-              'переменной x')
+    plt.title('Графики зависимости отношения истинной локальной погрешности к оценке погрешности')
     plt.xlabel('x')
     plt.ylabel('Велечина отношения')
     plt.legend(['Двухэтапный метод Рунге', 'Трёхэтапный метод Рунге'])
@@ -119,6 +118,7 @@ def auto_step_calc_num_graphic():
     class_tmp = ['Двухэтапный метод']*len(eps_arr) + ['Трёхэтапный метод']*len(eps_arr)
     df = pd.DataFrame({'заданная погрешность': eps_arr + eps_arr, 'количество вычислений': num_of_calculates_2 + num_of_calculates_3, 'class':class_tmp})
     sns.barplot(data = df, x='заданная погрешность', y='количество вычислений', hue='class')
+    plt.title('Количество вычислений в зависимоти от погрешности')
     plt.show()
 
 
@@ -148,4 +148,4 @@ auto_step_val_graphic()  # пункт 3.3.1
 
 auto_step_local_err_graphic()  # пункт 3.3.2
 
-auto_step_calc_num_graphic()
+auto_step_calc_num_graphic() # пункт 3.3.3
