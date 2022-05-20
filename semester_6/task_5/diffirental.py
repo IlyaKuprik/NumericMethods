@@ -39,9 +39,9 @@ def get_runge_method_res(h, x_0, y_01, y02, x_k, CalculationScheme, s, log=False
         y_2i = scheme.y_2(x_i)
         # print(f"В точке x_i = {x_i} получили значения y_1(x_i) = {y_1i}, y_2(x_i) = {y_2i}")
         scheme.x_0 = x_i
+        res_list.append((x_i, np.array([y_1i, y_2i]), np.array([scheme.y_10, scheme.y_20])))
         scheme.y_10 = y_1i
         scheme.y_20 = y_2i
-        res_list.append((x_i, np.array([y_1i, y_2i])))
     if log:
         return res_list
     if to_calc:
@@ -86,6 +86,7 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False, to_calc=Fa
             res2 = res2[0]
         added = get_runge_err(res1, res2, s)
         r = np.linalg.norm(added)
+        y_m10, y_m20 = y_10, y_20
         if r > eps * (2 ** s):
             h /= 2  # остаемся в x_i, но шаг уменьшаем
             continue
@@ -100,7 +101,7 @@ def runge_method_auto_step(CalculationScheme, s, eps=1e-5, log=False, to_calc=Fa
             x_i += h
             h *= 2  # увеличиваем шаг в 2 раза, приближение с полным шагом
             y_10, y_20 = map(float, res1)  # без уточнения + added
-        res_lst.append((x_i, h, np.array([y_10, y_20]), added))
+        res_lst.append((x_i, h, np.array([y_10, y_20]), added, np.array([y_m10, y_m20])))
     if log:
         return res_lst
     if to_calc:
