@@ -1,5 +1,5 @@
-from semester_6.task_5.schemes import TwoStageCalculationScheme, ThreeStageCalculationScheme
-from semester_6.task_5.diffirental import *
+from semester_6.diffirental.schemes import TwoStageCalculationScheme, ThreeStageCalculationScheme
+from semester_6.diffirental.diffirental import *
 import seaborn as sns
 import matplotlib.pyplot as plt
 import pandas as pd
