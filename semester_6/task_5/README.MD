@@ -24,9 +24,7 @@
 
 ![график зависимости величины шага интегрирования](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимости величины шага интегрирования.png)
 
-![график зависимости отношения локлаьной погрешности](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимости отношения локлаьной погрешности.png)
+![график зависимости отношения локальной погрешности](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимости отношения локальной погрешности.png)
 
 ![график зависимочти количества вычислений от погрешности](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимочти количества вычислений от погрешности.png)
 
-
-### Выводы

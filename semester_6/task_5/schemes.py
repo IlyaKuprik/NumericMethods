@@ -22,14 +22,14 @@ class TwoStageCalculationScheme(CalculationScheme):
     def y_1(self, x):
         self.num_of_calc += 1
         h = abs(self.x_0 - x)
-        if h < 1e-9:
+        if h < 1e-12:
             return self.y_10
         return self.y_1(self.x_0) + self.b_1 * self.k_1(1, h) + self.b_2 * self.k_1(2, h)
 
     def y_2(self, x):
         self.num_of_calc += 1
         h = abs(self.x_0 - x)
-        if h < 1e-9:
+        if h < 1e-12:
             return self.y_20
         return self.y_2(self.x_0) + self.b_1 * self.k_2(1, h) + self.b_2 * self.k_2(2, h)
 
@@ -55,7 +55,7 @@ class ThreeStageCalculationScheme(CalculationScheme):
     def y_1(self, x):
         self.num_of_calc += 1
         h = abs(self.x_0 - x)
-        if h < 1e-9:
+        if h < 1e-12:
             return self.y_10
         return self.y_1(self.x_0) + (1 / 6) * (
                 self.k_1(1, h) + 4 * self.k_1(2, h) + self.k_1(3, h))
@@ -63,7 +63,7 @@ class ThreeStageCalculationScheme(CalculationScheme):
     def y_2(self, x):
         self.num_of_calc += 1
         h = abs(self.x_0 - x)
-        if h < 1e-9:
+        if h < 1e-12:
             return self.y_20
         return self.y_2(self.x_0) + (1 / 6) * (
                 self.k_2(1, h) + 4 * self.k_2(2, h) + self.k_2(3, h))
@@ -91,7 +91,7 @@ class FourStageCalculationScheme(CalculationScheme):
     def y_1(self, x):
         self.num_of_calc += 1
         h = abs(self.x_0 - x)
-        if h < 1e-9:
+        if h < 1e-12:
             return self.y_10
         return self.y_1(self.x_0) + (1 / 6) * (
                 self.k_1(1, h) + 2 * self.k_1(2, h) + 2 * self.k_1(3, h) + self.k_1(4, h))
@@ -99,7 +99,7 @@ class FourStageCalculationScheme(CalculationScheme):
     def y_2(self, x):
         self.num_of_calc += 1
         h = abs(self.x_0 - x)
-        if h < 1e-9:
+        if h < 1e-12:
             return self.y_20
         return self.y_2(self.x_0) + (1 / 6) * (
                 self.k_2(1, h) + 2 * self.k_2(2, h) + 2 * self.k_2(3, h) + self.k_2(4, h))
