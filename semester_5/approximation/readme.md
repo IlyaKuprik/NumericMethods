@@ -3,44 +3,48 @@
 
 Степень полинома n = 1
 
-![normal_1](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/normal_1.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/normal_1.png" alt="normal_1" width="800"/>
 
 Степень полинома n = 2
 
-![normal_2](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/normal_2.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/normal_2.png" alt="normal_2" width="800"/>
 
 Степень полинома n = 3
 
-![normal_3](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/normal_3.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/normal_3.png" alt="normal_3" width="800"/>
 
 Степень полинома n = 4
 
-![normal_4](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/normal_4.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/normal_4.png" alt="normal_4" width="800"/>
 
 Степень полинома n = 5
 
-![normal_5](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/normal_5.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/normal_5.png" alt="normal_5" width="800"/>
 
 
 ### Графики для МНК(ортогональные полиномы)
 
 Степень полинома n = 1
 
-![ortogonal_1](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/ortogonal_1.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/ortogonal_1.png" alt="ortogonal_1" width="800"/>
+
 Степень полинома n = 2
 
-![ortogonal_2](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/ortogonal_2.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/ortogonal_2.png" alt="ortogonal_2" width="800"/>
+
 Степень полинома n = 3
 
-![ortogonal_3](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/ortogonal_3.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/ortogonal_3.png" alt="ortogonal_3" width="800"/>
+
 Степень полинома n = 4
 
-![ortogonal_4](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/ortogonal_4.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/ortogonal_4.png" alt="ortogonal_4" width="800"/>
+
 Степень полинома n = 5
 
-![ortogonal_5](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task3/ortogonal_5.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task3/ortogonal_5.png" alt="ortogonal_5" width="800"/>
 
 ### Таблица сумм квадратов ошибок для нормальных уравнений и ортогональных полиномов
 
-![image-20211203220501167](https://github.com/IlyaKuprik/NumericMethods/tree/master/images/task2/image-20211203220501167.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task2/image-20211203220501167.png" alt="image-20211203220501167" width="400"/>
 
