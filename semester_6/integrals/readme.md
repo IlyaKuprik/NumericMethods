@@ -2,11 +2,11 @@
 ### Пункт 1.3
 График зависимости абсолютной погрешности от количества разбиений интервала интегрирования для простейших квадратурных формул
 
-![image-20220401205710205](C:\Users\Ilya\AppData\Roaming\Typora\typora-user-images\image-20220401205710205.png)
+![image-20220401205710205](https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task4/image-20220401205710205.png)
 
 График зависимости абсолютной погрешности от количества разбиений интервала интегрирования для  3-x-точечных формул Ньютона-Кот(е)са и Гаусса
 
-![image-20220401205755770](C:\Users\Ilya\AppData\Roaming\Typora\typora-user-images\image-20220401205755770.png)
+![image-20220401205755770](https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task4/image-20220401205755770.png)
 ### Пункт 2.1 - 2.2
 ##### Длина шага , при котором была достигнута требуемая точность 
 
