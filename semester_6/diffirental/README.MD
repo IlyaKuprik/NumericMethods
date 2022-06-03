@@ -12,19 +12,18 @@
 
 ### Навигация по файлам
 
-* Расчётные схемы методов Рунге-Кутты 2, 3 и 4 порядка: [schemes.py](C:\Users\Ilya\PycharmProjects\numeric_methods\semester_6\task_5\schemes.py) (4-этапная схема не работает)
-* Реализация методов Рунге-Кутты с постоянным и автоматическим шагом на основе задаваемой расчётной схемы: [diffirental.py](C:\Users\Ilya\PycharmProjects\numeric_methods\semester_6\task_5\diffirental.py)
-* Вывод результатов и построение графиков: [main_diffirental.py](C:\Users\Ilya\PycharmProjects\numeric_methods\semester_6\task_5\main_diffirental.py)
+* Расчётные схемы методов Рунге-Кутты 2, 3 и 4 порядка: [schemes.py](https://github.com/IlyaKuprik/NumericMethods/blob/master/semester_6/diffirental/schemes.py) (4-этапная схема не работает)
+* Реализация методов Рунге-Кутты с постоянным и автоматическим шагом на основе задаваемой расчётной схемы: [diffirental.py](https://github.com/IlyaKuprik/NumericMethods/blob/master/semester_6/diffirental/diffirental.py)
+* Вывод результатов и построение графиков: [main_diffirental.py](https://github.com/IlyaKuprik/NumericMethods/blob/master/semester_6/diffirental/main_diffirental.py)
 
 ## Анализ эффективности
 
 В этом разделе представлены все графики, которые требовались в задании.
 
-![график зависимости истинной полной погрешности](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимости истинной полной погрешности.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task5/график%20зависимости%20истинной%20полной%20погрешности.png" alt="normal_1" width="800"/>
 
-![график зависимости величины шага интегрирования](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимости величины шага интегрирования.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task5/график%20зависимости%20величины%20шага%20интегрирования.png" alt="normal_1" width="800"/>
 
-![график зависимости отношения локальной погрешности](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимости отношения локальной погрешности.png)
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task5/график%20зависимости%20отношения%20локальной%20погрешности.png" alt="normal_1" width="800"/>
 
-![график зависимочти количества вычислений от погрешности](C:\Users\Ilya\PycharmProjects\numeric_methods\images\task5\график зависимочти количества вычислений от погрешности.png)
-
+<img src="https://github.com/IlyaKuprik/NumericMethods/blob/master/images/task5/график%20зависимочти%20количества%20вычислений%20от%20погрешности.png" alt="normal_1" width="800"/>
